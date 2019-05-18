@@ -60,10 +60,10 @@ public class ChessWindow extends JPanel {
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		//graph.setBackground(Color.WHITE);
-		//graph.setBounds(842, 16, 900, 900);
+				
 		frame.getContentPane().add(graph);
+		
+		
 	}
 
 }

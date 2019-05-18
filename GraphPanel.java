@@ -6,16 +6,21 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.geom.QuadCurve2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 
 public class GraphPanel extends JPanel {
@@ -40,9 +45,19 @@ public class GraphPanel extends JPanel {
 		Point startPoint = new Point(100,100);
 		int squareSize = 60;
 		
+		BufferedImage img = null;
 		
+		try {
+			img = ImageIO.read(new File("src/PiecePics/WhitePawn.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("yo that didnt work homeboy");
+		}
 		
 		DrawGrid(g2d, squareSize, startPoint);
+		
+		img = resizeImage(img, squareSize);
+		g2d.drawImage(img, startPoint.x, startPoint.y, null);
 		
 	}
 	
@@ -82,4 +97,15 @@ public class GraphPanel extends JPanel {
 		g2d.fillRect((8 * squareSize) + startPoint.x, startPoint.y, (squareSize / 20), (8 * squareSize) + (squareSize / 20));
 
 	}
+
+	public BufferedImage resizeImage(BufferedImage img, int newSize) { 
+	    Image tmp = img.getScaledInstance(newSize, newSize, Image.SCALE_SMOOTH);
+	    BufferedImage dimg = new BufferedImage(newSize, newSize, BufferedImage.TYPE_INT_ARGB);
+
+	    Graphics2D g2d = dimg.createGraphics();
+	    g2d.drawImage(tmp, 0, 0, null);
+	    g2d.dispose();
+
+	    return dimg;
+	}  
 }
