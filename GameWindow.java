@@ -23,7 +23,7 @@ import java.awt.event.*;
 
 import javax.swing.JFrame;
 
-public class ChessWindow extends JPanel {
+public class GameWindow extends JPanel {
 
 	private JFrame frame;
 
@@ -36,7 +36,7 @@ public class ChessWindow extends JPanel {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ChessWindow window = new ChessWindow();
+					GameWindow window = new GameWindow();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,7 +48,7 @@ public class ChessWindow extends JPanel {
 	/**
 	 * Create the application.
 	 */
-	public ChessWindow() {
+	public GameWindow() {
 		initialize();
 	}
 
