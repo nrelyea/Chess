@@ -24,6 +24,8 @@ public class Gui extends JFrame{
 	private JLabel statusbar;
 	private GraphicsPanel mainPanel = new GraphicsPanel();
 	
+	Point lineStart, lineFinish;
+	
 	public Gui() {
 		super("title");
 		
@@ -49,13 +51,18 @@ public class Gui extends JFrame{
 		
 		public void mouseClicked(MouseEvent event) {
 			statusbar.setText(String.format("Clicked at %d,%d", event.getX(), event.getY()));
-			System.out.println("CLICKY BOY");
 		}
 		public void mousePressed(MouseEvent event) {
 			statusbar.setText("you pressed down the mouse button");
+			lineStart = new Point(event.getX(),event.getY());
+			System.out.println("Start position: " + lineStart.x + "," + lineStart.y);
+			
 		}
 		public void mouseReleased(MouseEvent event) {
 			statusbar.setText("you released the mouse button");
+			lineFinish = new Point(event.getX(),event.getY());
+			System.out.println("End position: " + lineFinish.x + "," + lineFinish.y);
+			mainPanel.repaint();
 		}
 		public void mouseEntered(MouseEvent event) {
 			statusbar.setText("you entered the area");
@@ -108,6 +115,11 @@ public class Gui extends JFrame{
     		
     		img = resizeImage(img, squareSize);
     		g2d.drawImage(img, startPoint.x, startPoint.y, null);
+    		
+    		try {
+    			g2d.drawLine(lineStart.x, lineStart.y, lineFinish.x, lineFinish.y);
+    		} catch (Exception e) {
+    		}
         }
         
         public void DrawGrid(Graphics2D g2d, int squareSize, Point startPoint) {
