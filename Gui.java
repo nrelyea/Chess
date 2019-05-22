@@ -26,7 +26,10 @@ public class Gui extends JFrame{
 	
 	Board brd = new Board();
 	
+	Piece pieceInHand;
+	
 	private JLabel statusbar;
+	private int paintUpdateCount = 0;
 	private GraphicsPanel mainPanel = new GraphicsPanel();
 	
 	boolean dragging = false;
@@ -73,14 +76,24 @@ public class Gui extends JFrame{
 			statusbar.setText(String.format("Clicked at %d,%d", event.getX(), event.getY()));
 		}
 		public void mousePressed(MouseEvent event) {
+			mousePosition = new Point(event.getX(),event.getY());
 			Point startSquare = positionToSquare(new Point(event.getX(),event.getY()));
-			statusbar.setText("you pressed down the mouse button at square " + startSquare.x + "," + startSquare.y);			
+			statusbar.setText("you pressed down the mouse button at square " + startSquare.x + "," + startSquare.y);
+			if(startSquare.x != -1) {
+				pieceInHand = brd.getPiece(startSquare.x, startSquare.y);
+				brd.setPiece(startSquare.x, startSquare.y, null);
+			}
 		}
 		
 		public void mouseReleased(MouseEvent event) {
 			Point endSquare = positionToSquare(new Point(event.getX(),event.getY()));
-			statusbar.setText("you released the mouse button at square " + endSquare.x + "," + endSquare.y);			
+			statusbar.setText("you released the mouse button at square " + endSquare.x + "," + endSquare.y);
+			if(pieceInHand != null) {
+				brd.setPiece(endSquare.x, endSquare.y, pieceInHand);
+			}			
+			pieceInHand = null;			
 			dragging = false;
+			mainPanel.repaint();
 		}
 		public void mouseEntered(MouseEvent event) {
 			statusbar.setText("you entered the area");
@@ -98,6 +111,8 @@ public class Gui extends JFrame{
 			mousePosition = new Point(event.getX(),event.getY());
 			dragging = true;
 			
+			
+			
 			mainPanel.repaint();
 		}
 		public void mouseMoved(MouseEvent event) {
@@ -110,7 +125,7 @@ public class Gui extends JFrame{
 		Point square = mousePos.getLocation();
 		square = new Point(square.x - startPoint.x, square.y - startPoint.y);
 		if(square.x >= 0 && square.y >= 0) {
-			System.out.println(square.x + "," + square.y);
+			//System.out.println(square.x + "," + square.y);
 			square = new Point(square.x / squareSize, square.y / squareSize);
 			if(square.x < 8 && square.y < 8) {
 				return square;
@@ -129,25 +144,24 @@ public class Gui extends JFrame{
 
         @Override
         public void paintComponent(Graphics g) {
+        	
+        	paintUpdateCount++;
+        	
         	Graphics2D g2d = (Graphics2D) g;
     		super.paintComponent(g2d);
     		g2d.setStroke(new BasicStroke(2));
     		
     		g2d.setFont(new Font("Tahoma", Font.PLAIN, 24));
-    		g2d.drawString("I LOVE RINA", 50, 50);    	    		
-    		
-    		BufferedImage img = null;
-    		
-    		try {
-    			img = ImageIO.read(new File("src/PiecePics/WhitePawn.png"));
-    		} catch (IOException e) {
-    			System.out.println("yo that didnt work homeboy");
-    		}
+    		g2d.drawString("I LOVE RINA       Paint Update Count: " + paintUpdateCount, 50, 50);    	    		
     		
     		DrawGrid(g2d, squareSize, startPoint);
     		
     		DrawPieces(g2d, squareSize, startPoint, brd);
     		
+    		if(pieceInHand != null) {
+            	System.out.println("piece in hand");
+    			DrawPiece(g2d, pieceInHand, "exact", mousePosition.x - (squareSize / 2), mousePosition.y - (squareSize / 2));
+    		}
     		/*
     		img = resizeImage(img, squareSize);
     		g2d.drawImage(img, startPoint.x, startPoint.y, null);
@@ -198,19 +212,24 @@ public class Gui extends JFrame{
         		for(int j = 0; j < 8; j++) {
         			Piece piece = board.getPiece(i, j);
         			if(piece != null) {
-        				System.out.println("Piece at " + i + "," + j);
-        				DrawPiece(g2d, i, j, piece);
+        				//System.out.println("Piece at " + i + "," + j);
+        				DrawPiece(g2d, piece, "square", i, j);
         			}
         		}
         	}
         }
         
-        public void DrawPiece(Graphics2D g2d, int x, int y, Piece piece) {
+        public void DrawPiece(Graphics2D g2d,  Piece piece, String coordType, int x, int y) {
         	if(piece.getTeam() == "white" && piece.getType() == "pawn") {
         		try {
         			BufferedImage img = ImageIO.read(new File("src/PiecePics/WhitePawn.png"));
         			img = resizeImage(img, squareSize);
-        			g2d.drawImage(img, startPoint.x + (x * squareSize), startPoint.y + (y * squareSize), null);
+        			if(coordType == "square") {
+            			g2d.drawImage(img, startPoint.x + (x * squareSize), startPoint.y + (y * squareSize), null);
+        			}
+        			else {
+        				g2d.drawImage(img, x, y, null);
+        			}
         		} catch (IOException e) {
         			System.out.println("yo that didnt work homeboy");
         		}
