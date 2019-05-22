@@ -24,13 +24,20 @@ public class Gui extends JFrame{
 	Point startPoint = new Point(100,100);
 	int squareSize = 100;
 	
-	Board brd = new Board();
-	
-	Piece pieceInHand;
-	
 	private JLabel statusbar;
 	private int paintUpdateCount = 0;
 	private GraphicsPanel mainPanel = new GraphicsPanel();
+	
+	
+	BufferedImage imageBank[] = new BufferedImage[12];
+	ImageProcessing imgP = new ImageProcessing(squareSize);
+	
+	Board brd = new Board();
+		
+	
+	Piece pieceInHand;
+	Point pieceInHandOrigin;
+		
 	
 	boolean dragging = false;
 	
@@ -52,7 +59,9 @@ public class Gui extends JFrame{
 		
 		Handlerclass handler = new Handlerclass();
 		mainPanel.addMouseListener(handler);
-		mainPanel.addMouseMotionListener(handler);		
+		mainPanel.addMouseMotionListener(handler);
+		
+		imageBank = imgP.buildImageBank();
 		
 		String type = brd.getPiece(1,1).getType();
 		println(type);
@@ -77,10 +86,12 @@ public class Gui extends JFrame{
 		}
 		public void mousePressed(MouseEvent event) {
 			mousePosition = new Point(event.getX(),event.getY());
-			Point startSquare = positionToSquare(new Point(event.getX(),event.getY()));
+			Point startSquare = positionToSquare(new Point(event.getX(),event.getY()));			
 			statusbar.setText("you pressed down the mouse button at square " + startSquare.x + "," + startSquare.y);
+			
 			if(startSquare.x != -1) {
 				pieceInHand = brd.getPiece(startSquare.x, startSquare.y);
+				pieceInHandOrigin = new Point(startSquare.x,startSquare.y);
 				brd.setPiece(startSquare.x, startSquare.y, null);
 			}
 		}
@@ -89,7 +100,12 @@ public class Gui extends JFrame{
 			Point endSquare = positionToSquare(new Point(event.getX(),event.getY()));
 			statusbar.setText("you released the mouse button at square " + endSquare.x + "," + endSquare.y);
 			if(pieceInHand != null) {
-				brd.setPiece(endSquare.x, endSquare.y, pieceInHand);
+				if(endSquare.x != -1) {
+					brd.setPiece(endSquare.x, endSquare.y, pieceInHand);
+				}
+				else {
+					brd.setPiece(pieceInHandOrigin.x, pieceInHandOrigin.y, pieceInHand);
+				}
 			}			
 			pieceInHand = null;			
 			dragging = false;
@@ -159,17 +175,8 @@ public class Gui extends JFrame{
     		DrawPieces(g2d, squareSize, startPoint, brd);
     		
     		if(pieceInHand != null) {
-            	System.out.println("piece in hand");
     			DrawPiece(g2d, pieceInHand, "exact", mousePosition.x - (squareSize / 2), mousePosition.y - (squareSize / 2));
     		}
-    		/*
-    		img = resizeImage(img, squareSize);
-    		g2d.drawImage(img, startPoint.x, startPoint.y, null);
-    		
-    		if(dragging) {
-    			g2d.drawImage(img, mousePosition.x - (squareSize / 2), mousePosition.y - (squareSize / 2), null);
-    		}
-    		*/
         }
         
         public void DrawGrid(Graphics2D g2d, int squareSize, Point startPoint) {
@@ -221,30 +228,17 @@ public class Gui extends JFrame{
         
         public void DrawPiece(Graphics2D g2d,  Piece piece, String coordType, int x, int y) {
         	if(piece.getTeam() == "white" && piece.getType() == "pawn") {
-        		try {
-        			BufferedImage img = ImageIO.read(new File("src/PiecePics/WhitePawn.png"));
-        			img = resizeImage(img, squareSize);
+        		try {        			
         			if(coordType == "square") {
-            			g2d.drawImage(img, startPoint.x + (x * squareSize), startPoint.y + (y * squareSize), null);
+            			g2d.drawImage(imageBank[imgP.getImageIndex(piece)], startPoint.x + (x * squareSize), startPoint.y + (y * squareSize), null);
         			}
         			else {
-        				g2d.drawImage(img, x, y, null);
+        				g2d.drawImage(imageBank[imgP.getImageIndex(piece)], x, y, null);
         			}
-        		} catch (IOException e) {
+        		} catch (Exception e) {
         			System.out.println("yo that didnt work homeboy");
         		}
         	}
-        }
-        
-    	public BufferedImage resizeImage(BufferedImage img, int newSize) { 
-    	    Image tmp = img.getScaledInstance(newSize, newSize, Image.SCALE_SMOOTH);
-    	    BufferedImage dimg = new BufferedImage(newSize, newSize, BufferedImage.TYPE_INT_ARGB);
-
-    	    Graphics2D g2d = dimg.createGraphics();
-    	    g2d.drawImage(tmp, 0, 0, null);
-    	    g2d.dispose();
-
-    	    return dimg;
-    	}  
+        }           	 
     }
 }
