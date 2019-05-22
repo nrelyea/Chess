@@ -1,3 +1,5 @@
+import java.awt.Point;
+
 import javax.swing.JFrame;
 
 public class Chess {
@@ -9,10 +11,7 @@ public class Chess {
 		gui.setSize(300,200);
 		gui.setVisible(true);
 		
-		Board brd = new Board();
 		
-		String type = brd.getGrid()[1][1].getType();
-		print("\n" + type);
 	}
 	
 	
@@ -26,5 +25,8 @@ public class Chess {
 	
 	static void print(String str) {
 		System.out.print(str);
+	}
+	static void println(String str) {
+		System.out.print("\n" + str);
 	}
 }
