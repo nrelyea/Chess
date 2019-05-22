@@ -13,13 +13,16 @@ public class ImageProcessing {
 	public ImageProcessing(int size) {
 		squareSize = size;
 	}
-	
+	 
 	public BufferedImage[] buildImageBank() {
 		BufferedImage imageBank[] = new BufferedImage[12];
 		
 		try {
-			BufferedImage img = ImageIO.read(new File("src/PiecePics/WhitePawn.png"));
-			imageBank[0] = resizeImage(img, squareSize);
+			imageBank[0] = resizeImage(ImageIO.read(new File("src/PiecePics/WhitePawn.png")), squareSize);
+			
+			imageBank[6] = resizeImage(ImageIO.read(new File("src/PiecePics/BlackPawn.png")), squareSize);
+			
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -38,7 +41,7 @@ public class ImageProcessing {
 			return index;
 		}
 		else {
-			return index + 6;
+			return (index + 6);
 		}
 	}
 	
