@@ -19,8 +19,14 @@ public class ImageProcessing {
 		
 		try {
 			imageBank[0] = resizeImage(ImageIO.read(new File("src/PiecePics/WhitePawn.png")), squareSize);
+			imageBank[1] = resizeImage(ImageIO.read(new File("src/PiecePics/WhiteRook.png")), squareSize);
+			imageBank[2] = resizeImage(ImageIO.read(new File("src/PiecePics/WhiteKnight.png")), squareSize);
+			imageBank[3] = resizeImage(ImageIO.read(new File("src/PiecePics/WhiteBishop.png")), squareSize);
 			
 			imageBank[6] = resizeImage(ImageIO.read(new File("src/PiecePics/BlackPawn.png")), squareSize);
+			imageBank[7] = resizeImage(ImageIO.read(new File("src/PiecePics/BlackRook.png")), squareSize);
+			imageBank[8] = resizeImage(ImageIO.read(new File("src/PiecePics/BlackKnight.png")), squareSize);
+			imageBank[9] = resizeImage(ImageIO.read(new File("src/PiecePics/BlackBishop.png")), squareSize);
 			
 			
 		} catch (IOException e) {
@@ -35,6 +41,21 @@ public class ImageProcessing {
 		switch(piece.getType()) {
 			case "pawn":
 				index = 0;
+				break;
+			case "rook":
+				index = 1;
+				break;
+			case "knight":
+				index = 2;
+				break;
+			case "bishop":
+				index = 3;
+				break;
+			case "queen":
+				index = 4;
+				break;
+			case "king":
+				index = 5;
 				break;
 		}
 		if(piece.getTeam() == "white") {

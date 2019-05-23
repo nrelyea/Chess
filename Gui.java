@@ -63,11 +63,7 @@ public class Gui extends JFrame{
 		
 		imageBank = imgP.buildImageBank();
 		
-		brd.setPiece(1, 1, new Piece("white","pawn"));	
-		println(brd.getPiece(1,1).getType());
-		
-		brd.setPiece(3, 3, new Piece("black","pawn"));
-		println(brd.getPiece(3,3).getType());
+		brd.setTestingGrid();
 	}
 	
 	public void print(String str) {
@@ -228,9 +224,9 @@ public class Gui extends JFrame{
         
         public void DrawPiece(Graphics2D g2d,  Piece piece, String coordType, int x, int y) {
         	
-        	// THIS TOP LEVEL IF STATEMENT ONLY HERE BECAUSE PAWNS ONLY THING CURRENTLY BEING HANDLED
+        	// THIS TOP LEVEL IF STATEMENT ONLY HERE BECAUSE PAWNS AND BISHOPS ONLY THINGS CURRENTLY BEING HANDLED
         	
-        	if(piece.getType() == "pawn") {
+        	if(piece.getType() == "pawn" || piece.getType() == "bishop" || piece.getType() == "knight" || piece.getType() == "rook") {
         		try {        			
         			if(coordType == "square") {
             			g2d.drawImage(imageBank[imgP.getImageIndex(piece)], startPoint.x + (x * squareSize), startPoint.y + (y * squareSize), null);
