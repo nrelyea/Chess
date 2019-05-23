@@ -22,11 +22,15 @@ public class ImageProcessing {
 			imageBank[1] = resizeImage(ImageIO.read(new File("src/PiecePics/WhiteRook.png")), squareSize);
 			imageBank[2] = resizeImage(ImageIO.read(new File("src/PiecePics/WhiteKnight.png")), squareSize);
 			imageBank[3] = resizeImage(ImageIO.read(new File("src/PiecePics/WhiteBishop.png")), squareSize);
+			imageBank[4] = resizeImage(ImageIO.read(new File("src/PiecePics/WhiteQueen.png")), squareSize);
+			imageBank[5] = resizeImage(ImageIO.read(new File("src/PiecePics/WhiteKing.png")), squareSize);
 			
 			imageBank[6] = resizeImage(ImageIO.read(new File("src/PiecePics/BlackPawn.png")), squareSize);
 			imageBank[7] = resizeImage(ImageIO.read(new File("src/PiecePics/BlackRook.png")), squareSize);
 			imageBank[8] = resizeImage(ImageIO.read(new File("src/PiecePics/BlackKnight.png")), squareSize);
 			imageBank[9] = resizeImage(ImageIO.read(new File("src/PiecePics/BlackBishop.png")), squareSize);
+			imageBank[10] = resizeImage(ImageIO.read(new File("src/PiecePics/BlackQueen.png")), squareSize);
+			imageBank[11] = resizeImage(ImageIO.read(new File("src/PiecePics/BlackKing.png")), squareSize);
 			
 			
 		} catch (IOException e) {
