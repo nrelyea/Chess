@@ -32,8 +32,10 @@ public class Gui extends JFrame{
 	BufferedImage imageBank[] = new BufferedImage[12];
 	ImageProcessing imgP = new ImageProcessing(squareSize);
 	
+	AttackEvaluation attackEval = new AttackEvaluation();
+	
 	Board brd = new Board();
-		
+			
 	
 	Piece pieceInHand;
 	Point pieceInHandOrigin;
@@ -66,8 +68,6 @@ public class Gui extends JFrame{
 		//brd.setTestingGrid();
 		brd.setStartingGrid();
 		
-		AttackEvaluation attackEval = new AttackEvaluation();
-		attackEval.BlackIsAttacking(brd);
 	}
 	
 	public void print(String str) {
@@ -172,6 +172,11 @@ public class Gui extends JFrame{
     		
     		DrawGrid(g2d, squareSize, startPoint);
     		
+    		
+    		boolean[][] attacked = attackEval.SquaresAttacked(brd, "black");
+    		
+    		DrawAttackedSquares(g2d, squareSize, attacked);
+    		
     		DrawPieces(g2d, squareSize, startPoint, brd);
     		
     		if(pieceInHand != null) {
@@ -221,6 +226,24 @@ public class Gui extends JFrame{
         			if(piece != null) {
         				//System.out.println("Piece at " + i + "," + j);
         				DrawPiece(g2d, piece, "square", i, j);
+        			}
+        		}
+        	}
+        }
+        
+        public void DrawAttackedSquares(Graphics2D g2d, int squareSize, boolean[][] attackedSquares) {
+        	for(int i = 0; i < 8; i++) {
+        		for(int j = 0; j < 8; j++) {
+        			if(attackedSquares[i][j]) {
+        				
+        				// draw red square
+        	        	g2d.setColor(Color.RED);
+        				g2d.fillRect((i * squareSize) + startPoint.x, (j * squareSize) + startPoint.y, squareSize, squareSize);
+        				
+        				// fix black lines around square
+        				g2d.setColor(Color.BLACK);
+        				g2d.fillRect((i * squareSize) + startPoint.x, (j * squareSize) + startPoint.y, squareSize, (squareSize / 20));
+        				g2d.fillRect((i * squareSize) + startPoint.x, (j * squareSize) + startPoint.y, (squareSize / 20), squareSize);
         			}
         		}
         	}
