@@ -173,9 +173,13 @@ public class Gui extends JFrame{
     		DrawGrid(g2d, squareSize, startPoint);
     		
     		
-    		boolean[][] attacked = attackEval.SquaresAttacked(brd, "black");
-    		
+    		boolean[][] attacked = attackEval.AllSquaresAttacked(brd, "white");    		    		
     		DrawAttackedSquares(g2d, squareSize, attacked);
+    		
+    		boolean squareAttacked = attackEval.SingleSquareAttacked(brd, "white", new Point(4,4));
+    		if(squareAttacked) {
+        		g2d.drawString("OH SHIT BLACK UNDER ATTACK", 600, 50);
+    		}
     		
     		DrawPieces(g2d, squareSize, startPoint, brd);
     		
