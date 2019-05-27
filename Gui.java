@@ -65,8 +65,8 @@ public class Gui extends JFrame{
 		
 		imageBank = imgP.buildImageBank();
 		
-		//brd.setTestingGrid();
-		brd.setStartingGrid();
+		brd.setTestingGrid();
+		//brd.setStartingGrid();
 		
 	}
 	
@@ -176,7 +176,7 @@ public class Gui extends JFrame{
     		boolean[][] attacked = attackEval.AllSquaresAttacked(brd, "white");    		    		
     		DrawAttackedSquares(g2d, squareSize, attacked);
     		
-    		boolean squareAttacked = attackEval.SingleSquareAttacked(brd, "white", brd.getBlackKingPosition());
+    		boolean squareAttacked = attackEval.SingleSquareAttacked(brd, "white", brd.getBlackPiecePositions()[12]);
     		if(squareAttacked) {
         		g2d.drawString("OH SHIT BLACK UNDER ATTACK", 600, 50);
     		}
