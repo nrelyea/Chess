@@ -171,6 +171,18 @@ public class Board {
 		}
 	}
 	
+	public boolean isKingAttacked(String team) {
+		
+		AttackEvaluation eval = new AttackEvaluation();
+		
+		if(team == "white") {
+			return eval.SingleSquareAttacked(this, "black", getWhitePiecePositions()[12]);
+		}
+		else {
+			return eval.SingleSquareAttacked(this, "white", getBlackPiecePositions()[12]);
+		}
+	}
+	
 	// --- Getters and Setters
 	
 	public Piece[][] getGrid() {

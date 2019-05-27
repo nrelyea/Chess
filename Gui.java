@@ -215,8 +215,7 @@ public class Gui extends JFrame{
     		boolean[][] attacked = attackEval.AllSquaresAttacked(brd, "white");    		    		
     		DrawAttackedSquares(g2d, squareSize, attacked);
     		
-    		boolean squareAttacked = attackEval.SingleSquareAttacked(brd, "white", brd.getBlackPiecePositions()[12]);
-    		if(squareAttacked) {
+    		if(brd.isKingAttacked("black")) {
         		g2d.drawString("OH SHIT BLACK UNDER ATTACK", 600, 50);
     		}
     		
