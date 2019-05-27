@@ -67,6 +67,10 @@ public class Gui extends JFrame{
 		
 		brd.setTestingGrid();
 		//brd.setStartingGrid();
+		brd.updateLegalMoves("white");
+		
+		//brd.makeMove(new Move(new Point(1,1), new Point(1,2)));
+		//brd.setStartingGrid();
 		
 	}
 	
@@ -89,10 +93,16 @@ public class Gui extends JFrame{
 			Point startSquare = positionToSquare(new Point(event.getX(),event.getY()));			
 			statusbar.setText("you pressed down the mouse button at square " + startSquare.x + "," + startSquare.y);
 			
-			if(startSquare.x != -1) {
-				pieceInHand = brd.getPiece(startSquare.x, startSquare.y);
-				pieceInHandOrigin = new Point(startSquare.x,startSquare.y);
-				brd.setPiece(startSquare.x, startSquare.y, null);
+			if(startSquare.x != -1 && brd.grid[startSquare.x][startSquare.y] != null) {
+				if(brd.whitesTurn && brd.getPiece(startSquare.x, startSquare.y).getTeam() == "white") {
+					pieceInHand = brd.getPiece(startSquare.x, startSquare.y);
+					pieceInHandOrigin = new Point(startSquare.x,startSquare.y);
+					brd.setPiece(startSquare.x, startSquare.y, null);
+				}
+				else if(!brd.whitesTurn && brd.getPiece(startSquare.x, startSquare.y).getTeam() == "black") {
+					
+				}
+				
 			}
 		}
 		
@@ -100,8 +110,22 @@ public class Gui extends JFrame{
 			Point endSquare = positionToSquare(new Point(event.getX(),event.getY()));
 			statusbar.setText("you released the mouse button at square " + endSquare.x + "," + endSquare.y);
 			if(pieceInHand != null) {
-				if(endSquare.x != -1) {
-					brd.setPiece(endSquare.x, endSquare.y, pieceInHand);
+				if(endSquare.x != -1 && pieceInHand.getTeam() == "white") {
+					boolean legalMove = false;
+					for(int i = 0; i < brd.whiteLegalMoves.size(); i++) { 
+						Move move = brd.whiteLegalMoves.get(i);
+		        		if(move.startPoint.x == pieceInHandOrigin.x && move.startPoint.y == pieceInHandOrigin.y && move.endPoint.x == endSquare.x && move.endPoint.y == endSquare.y) { 
+		        			
+		        			legalMove = true;
+		        			brd.setPiece(pieceInHandOrigin.x, pieceInHandOrigin.y, pieceInHand);
+		        			brd.makeMove(move);
+		        			brd.updateLegalMoves("white");
+
+		        		}
+		        	}
+					if(!legalMove) {
+						brd.setPiece(pieceInHandOrigin.x, pieceInHandOrigin.y, pieceInHand);
+					}
 				}
 				else {
 					brd.setPiece(pieceInHandOrigin.x, pieceInHandOrigin.y, pieceInHand);
@@ -125,9 +149,7 @@ public class Gui extends JFrame{
 		public void mouseDragged(MouseEvent event) {
 			statusbar.setText("you are dragging the mouse");
 			mousePosition = new Point(event.getX(),event.getY());
-			dragging = true;
-			
-			
+			dragging = true;			
 			
 			mainPanel.repaint();
 		}
@@ -181,11 +203,17 @@ public class Gui extends JFrame{
         		g2d.drawString("OH SHIT BLACK UNDER ATTACK", 600, 50);
     		}
     		
+    		if(pieceInHand != null) {
+    			DrawLegalMoves(g2d, pieceInHandOrigin.x, pieceInHandOrigin.y); 			
+    		}    
+    		
     		DrawPieces(g2d, squareSize, startPoint, brd);
     		
     		if(pieceInHand != null) {
-    			DrawPiece(g2d, pieceInHand, "exact", mousePosition.x - (squareSize / 2), mousePosition.y - (squareSize / 2));
-    		}
+    			DrawPiece(g2d, pieceInHand, "exact", mousePosition.x - (squareSize / 2), mousePosition.y - (squareSize / 2));   			
+    		}    		    		
+    		    		
+    		//brd.makeMove(new Move(new Point(0,0), new Point(7,7)));
         }
         
         public void DrawGrid(Graphics2D g2d, int squareSize, Point startPoint) {
@@ -257,18 +285,41 @@ public class Gui extends JFrame{
         	
         	// THIS TOP LEVEL IF STATEMENT ONLY HERE BECAUSE CERTAIN THINGS CURRENTLY BEING HANDLED
         	
-        	if(true) {
-        		try {        			
-        			if(coordType == "square") {
-            			g2d.drawImage(imageBank[imgP.getImageIndex(piece)], startPoint.x + (x * squareSize), startPoint.y + (y * squareSize), null);
-        			}
-        			else {
-        				g2d.drawImage(imageBank[imgP.getImageIndex(piece)], x, y, null);
-        			}
-        		} catch (Exception e) {
-        			System.out.println("yo that didnt work homeboy");
+        	try {        			
+    			if(coordType == "square") {
+        			g2d.drawImage(imageBank[imgP.getImageIndex(piece)], startPoint.x + (x * squareSize), startPoint.y + (y * squareSize), null);
+    			}
+    			else {
+    				g2d.drawImage(imageBank[imgP.getImageIndex(piece)], x, y, null);
+    			}
+    		} catch (Exception e) {
+    			System.out.println("yo that didnt work homeboy");
+    		}
+        }
+        
+        public void DrawLegalMoves(Graphics2D g2d, int x, int y) {
+        	
+        	int endx, endy;
+        	
+        	for(int i = 0; i < brd.whiteLegalMoves.size(); i++) {        		
+        		if(brd.whiteLegalMoves.get(i).startPoint.x == x && brd.whiteLegalMoves.get(i).startPoint.y == y) { 
+        			
+        			endx = brd.whiteLegalMoves.get(i).endPoint.x;
+        			endy = brd.whiteLegalMoves.get(i).endPoint.y;
+        			
+                	// draw green square
+                	g2d.setColor(Color.GREEN);
+        			g2d.fillRect((endx * squareSize) + startPoint.x, (endy * squareSize) + startPoint.y, squareSize, squareSize);
+        			
+        			// fix black lines around square
+        			g2d.setColor(Color.BLACK);
+        			g2d.fillRect((endx * squareSize) + startPoint.x, (endy * squareSize) + startPoint.y, squareSize, (squareSize / 20));
+        			g2d.fillRect((endx * squareSize) + startPoint.x, (endy * squareSize) + startPoint.y, (squareSize / 20), squareSize);
         		}
         	}
-        }           	 
+        	
+        	
+
+        }
     }
 }

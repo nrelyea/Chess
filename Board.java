@@ -6,6 +6,8 @@ public class Board {
 	
 	Piece grid[][] = new Piece[8][8];
 	
+	boolean whitesTurn;
+	
 	List<Move> whiteLegalMoves = new ArrayList<>();
 	List<Move> blackLegalMoves = new ArrayList<>();
 	
@@ -20,7 +22,7 @@ public class Board {
 	Point blackPiecePositions[] = new Point[16];
 	
 	public Board() {
-		
+		whitesTurn = true;
 	}
 	
 	public void setTestingGrid() {
@@ -104,7 +106,62 @@ public class Board {
 		blackPiecePositions[15] = new Point(7,0);
 	}
 	
+	public void makeMove(Move move) {
+		// first, vacate landing location of piece, removing any piece that is currently there if necessary
+		if(grid[move.endPoint.x][move.endPoint.y] != null) {
+			String endSquareTeam = grid[move.endPoint.x][move.endPoint.y].getTeam();
+			if(endSquareTeam == "white") {
+				for(int i = 0; i < 16; i++) {
+					if(whitePiecePositions[i] != null && whitePiecePositions[i].x == move.endPoint.x && whitePiecePositions[i].y == move.endPoint.y) {
+						whitePiecePositions[i] = null;
+						break;
+					}
+				}
+			}
+			else {
+				for(int i = 0; i < 16; i++) {
+					if(blackPiecePositions[i] != null && blackPiecePositions[i].x == move.endPoint.x && blackPiecePositions[i].y == move.endPoint.y) {
+						blackPiecePositions[i] = null;
+						break;
+					}
+				}
+			}
+		}
+		
+		// next, update piece location		
+		String startSquareTeam = grid[move.startPoint.x][move.startPoint.y].getTeam();
+		if(startSquareTeam == "white") {
+			for(int i = 0; i < 16; i++) {
+				if(whitePiecePositions[i] != null && whitePiecePositions[i].x == move.startPoint.x && whitePiecePositions[i].y == move.startPoint.y) {
+					whitePiecePositions[i] = new Point(move.endPoint.x, move.endPoint.y);
+					break;
+				}
+			}
+		}
+		else {
+			for(int i = 0; i < 16; i++) {
+				if(blackPiecePositions[i] != null && blackPiecePositions[i].x == move.startPoint.x && blackPiecePositions[i].y == move.startPoint.y) {
+					blackPiecePositions[i] = new Point(move.endPoint.x, move.endPoint.y);
+					break;
+				}
+			}
+		}
+		
+		// finally update grid to physically move the piece to its new location
+		grid[move.endPoint.x][move.endPoint.y] = grid[move.startPoint.x][move.startPoint.y];
+		grid[move.startPoint.x][move.startPoint.y] = null;
+	}
 	
+	public void updateLegalMoves(String team) {
+		whiteLegalMoves.clear();
+		if(team == "white") {
+			for(int i = 0; i < 16; i++) {
+				if(whitePiecePositions[i] != null) {
+					whiteLegalMoves.add(new Move(whitePiecePositions[i],new Point(whitePiecePositions[i].x,whitePiecePositions[i].y - 1)));
+				}
+			}
+		}
+	}
 	
 	// --- Getters and Setters
 	
@@ -138,5 +195,13 @@ public class Board {
 	
 	public void setBlackPiecePosition(Point newPos, int index) {
 		this.blackPiecePositions[index] = newPos;
+	}
+	
+	public List<Move> getWhiteLegalMoves(){
+		return whiteLegalMoves;
+	}
+	
+	public List<Move> getBlackLegalMoves(){
+		return blackLegalMoves;
 	}
 }
