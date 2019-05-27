@@ -68,6 +68,7 @@ public class Gui extends JFrame{
 		brd.setTestingGrid();
 		//brd.setStartingGrid();
 		brd.updateLegalMoves("white");
+		brd.updateLegalMoves("black");
 		
 		//brd.makeMove(new Move(new Point(1,1), new Point(1,2)));
 		//brd.setStartingGrid();
@@ -93,16 +94,15 @@ public class Gui extends JFrame{
 			Point startSquare = positionToSquare(new Point(event.getX(),event.getY()));			
 			statusbar.setText("you pressed down the mouse button at square " + startSquare.x + "," + startSquare.y);
 			
+			// if clicking on a piece
 			if(startSquare.x != -1 && brd.grid[startSquare.x][startSquare.y] != null) {
-				if(brd.whitesTurn && brd.getPiece(startSquare.x, startSquare.y).getTeam() == "white") {
+				// if its whites turn and the piece is white, or if its blacks turn and the piece is black
+				if((brd.whitesTurn && brd.getPiece(startSquare.x, startSquare.y).getTeam() == "white") || (!brd.whitesTurn && brd.getPiece(startSquare.x, startSquare.y).getTeam() == "black")) {
+					// pick up the piece, record its origin, and clear the origin's spot on the grid
 					pieceInHand = brd.getPiece(startSquare.x, startSquare.y);
 					pieceInHandOrigin = new Point(startSquare.x,startSquare.y);
 					brd.setPiece(startSquare.x, startSquare.y, null);
-				}
-				else if(!brd.whitesTurn && brd.getPiece(startSquare.x, startSquare.y).getTeam() == "black") {
-					
-				}
-				
+				}				
 			}
 		}
 		
@@ -120,6 +120,23 @@ public class Gui extends JFrame{
 		        			brd.setPiece(pieceInHandOrigin.x, pieceInHandOrigin.y, pieceInHand);
 		        			brd.makeMove(move);
 		        			brd.updateLegalMoves("white");
+
+		        		}
+		        	}
+					if(!legalMove) {
+						brd.setPiece(pieceInHandOrigin.x, pieceInHandOrigin.y, pieceInHand);
+					}
+				}
+				else if(endSquare.x != -1 && pieceInHand.getTeam() == "black") {
+					boolean legalMove = false;
+					for(int i = 0; i < brd.blackLegalMoves.size(); i++) { 
+						Move move = brd.blackLegalMoves.get(i);
+		        		if(move.startPoint.x == pieceInHandOrigin.x && move.startPoint.y == pieceInHandOrigin.y && move.endPoint.x == endSquare.x && move.endPoint.y == endSquare.y) { 
+		        			
+		        			legalMove = true;
+		        			brd.setPiece(pieceInHandOrigin.x, pieceInHandOrigin.y, pieceInHand);
+		        			brd.makeMove(move);
+		        			brd.updateLegalMoves("black");
 
 		        		}
 		        	}
@@ -301,25 +318,39 @@ public class Gui extends JFrame{
         	
         	int endx, endy;
         	
-        	for(int i = 0; i < brd.whiteLegalMoves.size(); i++) {        		
-        		if(brd.whiteLegalMoves.get(i).startPoint.x == x && brd.whiteLegalMoves.get(i).startPoint.y == y) { 
-        			
-        			endx = brd.whiteLegalMoves.get(i).endPoint.x;
-        			endy = brd.whiteLegalMoves.get(i).endPoint.y;
-        			
-                	// draw green square
-                	g2d.setColor(Color.GREEN);
-        			g2d.fillRect((endx * squareSize) + startPoint.x, (endy * squareSize) + startPoint.y, squareSize, squareSize);
-        			
-        			// fix black lines around square
-        			g2d.setColor(Color.BLACK);
-        			g2d.fillRect((endx * squareSize) + startPoint.x, (endy * squareSize) + startPoint.y, squareSize, (squareSize / 20));
-        			g2d.fillRect((endx * squareSize) + startPoint.x, (endy * squareSize) + startPoint.y, (squareSize / 20), squareSize);
-        		}
+        	if(pieceInHand.getTeam() == "white") {
+        		for(int i = 0; i < brd.whiteLegalMoves.size(); i++) {        		
+            		if(brd.whiteLegalMoves.get(i).startPoint.x == x && brd.whiteLegalMoves.get(i).startPoint.y == y) { 
+            			
+            			endx = brd.whiteLegalMoves.get(i).endPoint.x;
+            			endy = brd.whiteLegalMoves.get(i).endPoint.y;
+            			
+            			DrawGreenSquare(g2d, endx, endy);
+            		}
+            	}
         	}
-        	
-        	
-
+        	else {
+        		for(int i = 0; i < brd.blackLegalMoves.size(); i++) {        		
+            		if(brd.blackLegalMoves.get(i).startPoint.x == x && brd.blackLegalMoves.get(i).startPoint.y == y) { 
+            			
+            			endx = brd.blackLegalMoves.get(i).endPoint.x;
+            			endy = brd.blackLegalMoves.get(i).endPoint.y;
+            			
+                    	DrawGreenSquare(g2d, endx, endy);
+            		}
+            	}
+        	}
+        }
+        
+        private void DrawGreenSquare(Graphics2D g2d, int drawX, int drawY) {
+        	// draw green square
+        	g2d.setColor(Color.GREEN);
+			g2d.fillRect((drawX * squareSize) + startPoint.x, (drawY * squareSize) + startPoint.y, squareSize, squareSize);
+			
+			// fix black lines around square
+			g2d.setColor(Color.BLACK);
+			g2d.fillRect((drawX * squareSize) + startPoint.x, (drawY * squareSize) + startPoint.y, squareSize, (squareSize / 20));
+			g2d.fillRect((drawX * squareSize) + startPoint.x, (drawY * squareSize) + startPoint.y, (squareSize / 20), squareSize);
         }
     }
 }

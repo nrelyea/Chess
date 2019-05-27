@@ -128,7 +128,7 @@ public class Board {
 			}
 		}
 		
-		// next, update piece location		
+		// next, update piece position in the appropriate piece position list		
 		String startSquareTeam = grid[move.startPoint.x][move.startPoint.y].getTeam();
 		if(startSquareTeam == "white") {
 			for(int i = 0; i < 16; i++) {
@@ -152,12 +152,20 @@ public class Board {
 		grid[move.startPoint.x][move.startPoint.y] = null;
 	}
 	
-	public void updateLegalMoves(String team) {
-		whiteLegalMoves.clear();
+	public void updateLegalMoves(String team) {		
 		if(team == "white") {
+			whiteLegalMoves.clear();
 			for(int i = 0; i < 16; i++) {
 				if(whitePiecePositions[i] != null) {
 					whiteLegalMoves.add(new Move(whitePiecePositions[i],new Point(whitePiecePositions[i].x,whitePiecePositions[i].y - 1)));
+				}
+			}
+		}
+		else {
+			blackLegalMoves.clear();
+			for(int i = 0; i < 16; i++) {
+				if(blackPiecePositions[i] != null) {
+					blackLegalMoves.add(new Move(blackPiecePositions[i],new Point(blackPiecePositions[i].x,blackPiecePositions[i].y + 1)));
 				}
 			}
 		}
