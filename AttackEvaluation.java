@@ -316,7 +316,7 @@ public class AttackEvaluation {
 					
 					
 					// determine if KNIGHT is attacking the square
-					if(grid[i][j].getType() == "knight") {
+					else if(grid[i][j].getType() == "knight") {
 						
 						if(i-1 == squareX && j-2 == squareY) {
 							return true;
@@ -346,7 +346,7 @@ public class AttackEvaluation {
 					}
 					
 					// determine if BISHOP is attacking the square
-					if(grid[i][j].getType() == "bishop") {
+					else if(grid[i][j].getType() == "bishop") {
 						x=i+1;
 						y=j+1;
 						while(x < 8 && y < 8) {
@@ -400,7 +400,7 @@ public class AttackEvaluation {
 					}
 					
 					// determine if ROOK is attacking the square
-					if(grid[i][j].getType() == "rook") {
+					else if(grid[i][j].getType() == "rook") {
 						x=i+1;
 						y=j;
 						while(x < 8) {
@@ -447,7 +447,7 @@ public class AttackEvaluation {
 					}
 					
 					// determine if QUEEN is attacking the square
-					if(grid[i][j].getType() == "queen") {
+					else if(grid[i][j].getType() == "queen") {
 						
 						// diagonal
 						x=i+1;
@@ -545,7 +545,7 @@ public class AttackEvaluation {
 					}
 					
 					// determine if KING is attacking the square
-					if(grid[i][j].getType() == "king") {						
+					else if(grid[i][j].getType() == "king") {						
 						if(Math.abs(i-squareX) <= 1 && Math.abs(j-squareY) <= 1) {
 							return true;
 						}						

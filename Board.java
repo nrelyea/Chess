@@ -147,19 +147,18 @@ public class Board {
 			}
 		}
 		
-		// finally update grid to physically move the piece to its new location
+		// then update grid to physically move the piece to its new location
 		grid[move.endPoint.x][move.endPoint.y] = grid[move.startPoint.x][move.startPoint.y];
 		grid[move.startPoint.x][move.startPoint.y] = null;
+		
+		// finally, ensure the value of hasMoved for that piece is 'true'
+		grid[move.endPoint.x][move.endPoint.y].setHasMoved(true);
 	}
 	
-	public void updateLegalMoves(String team) {		
+	public void updateLegalMoves(String team) {
+		LegalMoves legalMoves = new LegalMoves();
 		if(team == "white") {
-			whiteLegalMoves.clear();
-			for(int i = 0; i < 16; i++) {
-				if(whitePiecePositions[i] != null) {
-					whiteLegalMoves.add(new Move(whitePiecePositions[i],new Point(whitePiecePositions[i].x,whitePiecePositions[i].y - 1)));
-				}
-			}
+			whiteLegalMoves = legalMoves.GenerateLegalMovesForWhite(grid, whitePiecePositions);
 		}
 		else {
 			blackLegalMoves.clear();

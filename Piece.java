@@ -4,10 +4,12 @@ public class Piece {
 	String team;
 	String type;
 	int value;
+	boolean hasMoved;
 	
 	public Piece(String pieceTeam, String pieceType) {
 		team = pieceTeam;
 		type = pieceType;
+		hasMoved = false;
 		
 		value = pieceValue(type);
 	}
@@ -45,6 +47,14 @@ public class Piece {
 	
 	public void setType(String newType) {
 		this.type = newType;
+	}
+	
+	public boolean getHasMoved() {
+		return hasMoved;
+	}
+	
+	public void setHasMoved(boolean bool) {
+		this.hasMoved = bool;
 	}
 	
 }

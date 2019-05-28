@@ -65,8 +65,8 @@ public class Gui extends JFrame{
 		
 		imageBank = imgP.buildImageBank();
 		
-		brd.setTestingGrid();
-		//brd.setStartingGrid();
+		//brd.setTestingGrid();
+		brd.setStartingGrid();
 		brd.updateLegalMoves("white");
 		brd.updateLegalMoves("black");
 		
@@ -298,9 +298,7 @@ public class Gui extends JFrame{
         }
         
         public void DrawPiece(Graphics2D g2d,  Piece piece, String coordType, int x, int y) {
-        	
-        	// THIS TOP LEVEL IF STATEMENT ONLY HERE BECAUSE CERTAIN THINGS CURRENTLY BEING HANDLED
-        	
+        	        	
         	try {        			
     			if(coordType == "square") {
         			g2d.drawImage(imageBank[imgP.getImageIndex(piece)], startPoint.x + (x * squareSize), startPoint.y + (y * squareSize), null);
