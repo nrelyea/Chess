@@ -313,8 +313,7 @@ public class AttackEvaluation {
 						
 					}
 					
-					
-					
+										
 					// determine if KNIGHT is attacking the square
 					else if(grid[i][j].getType() == "knight") {
 						

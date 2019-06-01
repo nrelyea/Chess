@@ -6,6 +6,8 @@ public class Board {
 	
 	Piece grid[][] = new Piece[8][8];
 	
+	int boardValue;
+	
 	boolean whitesTurn;
 	
 	List<Move> whiteLegalMoves = new ArrayList<>();
@@ -26,84 +28,51 @@ public class Board {
 	}
 	
 	public void setTestingGrid() {
-		setPiece(1, 6, new Piece("white","pawn"));			
-		setPiece(2, 6, new Piece("white","rook"));		
-		setPiece(3, 6, new Piece("white","knight"));			
-		setPiece(4, 6, new Piece("white","bishop"));
-		setPiece(5, 6, new Piece("white","queen"));
-		setPiece(6, 6, new Piece("white","king"));
 		
-		setPiece(1, 1, new Piece("black","pawn"));
-		setPiece(2, 1, new Piece("black","rook"));
-		setPiece(3, 1, new Piece("black","knight"));		
-		setPiece(4, 1, new Piece("black","bishop"));
-		setPiece(5, 1, new Piece("black","queen"));
-		setPiece(6, 1, new Piece("black","king"));
+		AddPiece("white", "pawn", 1, 6);
+		AddPiece("white", "rook", 2, 6);
+		AddPiece("white", "knight", 3, 6);
+		AddPiece("white", "bishop", 4, 6);
+		AddPiece("white", "queen", 5, 6);
+		AddPiece("white", "king", 6, 6);
 		
-		whitePiecePositions[0] = new Point(1,6);
-		whitePiecePositions[8] = new Point(2,6);
-		whitePiecePositions[9] = new Point(3,6);
-		whitePiecePositions[10] = new Point(4,6);
-		whitePiecePositions[11] = new Point(5,6);
-		whitePiecePositions[12] = new Point(6,6);
+		AddPiece("black", "pawn", 1, 1);
+		AddPiece("black", "rook", 2, 1);
+		AddPiece("black", "knight", 3, 1);
+		AddPiece("black", "bishop", 4, 1);
+		AddPiece("black", "queen", 5, 1);
+		AddPiece("black", "king", 6, 1);
 		
-		blackPiecePositions[0] = new Point(1,1);
-		blackPiecePositions[8] = new Point(2,1);
-		blackPiecePositions[9] = new Point(3,1);
-		blackPiecePositions[10] = new Point(4,1);
-		blackPiecePositions[11] = new Point(5,1);
-		blackPiecePositions[12] = new Point(6,1);	
+		AddPiece("black", "bishop", 2, 2);
+		AddPiece("white", "pawn", 5, 5);
+		
 	}
 	
 	public void setStartingGrid() {
 		
 		for(int i = 0; i < 8; i++) {
-			setPiece(i, 6, new Piece("white","pawn"));	
+			AddPiece("white", "pawn", i, 6);	
 		}				
-		setPiece(0, 7, new Piece("white","rook"));		
-		setPiece(1, 7, new Piece("white","knight"));			
-		setPiece(2, 7, new Piece("white","bishop"));
-		setPiece(3, 7, new Piece("white","queen"));
-		setPiece(4, 7, new Piece("white","king"));
-		setPiece(5, 7, new Piece("white","bishop"));
-		setPiece(6, 7, new Piece("white","knight"));
-		setPiece(7, 7, new Piece("white","rook"));	
+		AddPiece("white", "rook", 0, 7);		
+		AddPiece("white", "knight", 1, 7);			
+		AddPiece("white", "bishop", 2, 7);
+		AddPiece("white", "queen", 3, 7);
+		AddPiece("white", "king", 4, 7);
+		AddPiece("white", "bishop", 5, 7);
+		AddPiece("white", "knight", 6, 7);
+		AddPiece("white", "rook", 7, 7);
 		
 		for(int i = 0; i < 8; i++) {
-			setPiece(i, 1, new Piece("black","pawn"));	
+			AddPiece("black", "pawn", i, 1);	
 		}				
-		setPiece(0, 0, new Piece("black","rook"));		
-		setPiece(1, 0, new Piece("black","knight"));			
-		setPiece(2, 0, new Piece("black","bishop"));
-		setPiece(3, 0, new Piece("black","queen"));
-		setPiece(4, 0, new Piece("black","king"));
-		setPiece(5, 0, new Piece("black","bishop"));
-		setPiece(6, 0, new Piece("black","knight"));
-		setPiece(7, 0, new Piece("black","rook"));
-		
-		for(int i = 0; i < 8; i++) {
-			whitePiecePositions[i] = new Point(i,6);
-		}		
-		whitePiecePositions[8] = new Point(0,7);
-		whitePiecePositions[9] = new Point(1,7);
-		whitePiecePositions[10] = new Point(2,7);
-		whitePiecePositions[11] = new Point(3,7);
-		whitePiecePositions[12] = new Point(4,7);
-		whitePiecePositions[13] = new Point(5,7);
-		whitePiecePositions[14] = new Point(6,7);
-		whitePiecePositions[15] = new Point(7,7);
-		
-		for(int i = 0; i < 8; i++) {
-			blackPiecePositions[i] = new Point(i,1);
-		}		
-		blackPiecePositions[8] = new Point(0,0);
-		blackPiecePositions[9] = new Point(1,0);
-		blackPiecePositions[10] = new Point(2,0);
-		blackPiecePositions[11] = new Point(3,0);
-		blackPiecePositions[12] = new Point(4,0);
-		blackPiecePositions[13] = new Point(5,0);
-		blackPiecePositions[14] = new Point(6,0);
-		blackPiecePositions[15] = new Point(7,0);
+		AddPiece("black", "rook", 0, 0);		
+		AddPiece("black", "knight", 1, 0);			
+		AddPiece("black", "bishop", 2, 0);
+		AddPiece("black", "queen", 3, 0);
+		AddPiece("black", "king", 4, 0);
+		AddPiece("black", "bishop", 5, 0);
+		AddPiece("black", "knight", 6, 0);
+		AddPiece("black", "rook", 7, 0);		
 	}
 	
 	public void makeMove(Move move) {
@@ -153,12 +122,14 @@ public class Board {
 		
 		// finally, ensure the value of hasMoved for that piece is 'true'
 		grid[move.endPoint.x][move.endPoint.y].setHasMoved(true);
+		
+		updateBoardValue();
 	}
 	
 	public void updateLegalMoves(String team) {
 		LegalMoves legalMoves = new LegalMoves();
 		if(team == "white") {
-			whiteLegalMoves = legalMoves.GenerateLegalMovesForWhite(grid, whitePiecePositions);
+			whiteLegalMoves = legalMoves.GenerateLegalMovesForWhite(this, whitePiecePositions);
 		}
 		else {
 			blackLegalMoves.clear();
@@ -170,16 +141,108 @@ public class Board {
 		}
 	}
 	
+	public void updateBoardValue() {
+		int whiteValue = 0;
+		for (int i = 0; i < 16; i++) {
+			if(whitePiecePositions[i] != null) {
+				whiteValue += grid[whitePiecePositions[i].x][whitePiecePositions[i].y].getValue();
+			}
+		}
+		int blackValue = 0;
+		for (int i = 0; i < 16; i++) {
+			if(blackPiecePositions[i] != null) {
+				blackValue += grid[blackPiecePositions[i].x][blackPiecePositions[i].y].getValue();
+			}
+		}
+		
+		boardValue = whiteValue - blackValue;
+	}
+	
 	public boolean isKingAttacked(String team) {
 		
 		AttackEvaluation eval = new AttackEvaluation();
 		
 		if(team == "white") {
-			return eval.SingleSquareAttacked(this, "black", getWhitePiecePositions()[12]);
+			return eval.SingleSquareAttacked(this, "black", getALLWhitePiecePositions()[12]);
 		}
 		else {
-			return eval.SingleSquareAttacked(this, "white", getBlackPiecePositions()[12]);
+			return eval.SingleSquareAttacked(this, "white", getALLBlackPiecePositions()[12]);
 		}
+	}
+	
+	public void AddPiece(String team, String type, int x, int y) {
+		setPiece(x, y, new Piece(team, type));
+		if(type == "pawn") {
+			for(int i = 0; i < 8; i++) {
+				if(team == "white" && whitePiecePositions[i] == null) {
+					whitePiecePositions[i] = new Point(x,y);
+					break;
+				}
+				else if(team == "black" && blackPiecePositions[i] == null) {
+					blackPiecePositions[i] = new Point(x,y);
+					break;
+				}
+			}
+		}
+		else if(type == "knight") {
+			if(team == "white" && whitePiecePositions[9] == null) {
+				whitePiecePositions[9] = new Point(x,y);
+			}
+			else if(team == "white" && whitePiecePositions[14] == null) {
+				whitePiecePositions[14] = new Point(x,y);
+			}
+			else if(team == "black" && blackPiecePositions[9] == null) {
+				blackPiecePositions[9] = new Point(x,y);
+			}
+			else if(team == "black" && blackPiecePositions[14] == null) {
+				blackPiecePositions[14] = new Point(x,y);
+			}			
+		}
+		else if(type == "rook") {
+			if(team == "white" && whitePiecePositions[8] == null) {
+				whitePiecePositions[8] = new Point(x,y);
+			}
+			else if(team == "white" && whitePiecePositions[15] == null) {
+				whitePiecePositions[15] = new Point(x,y);
+			}
+			else if(team == "black" && blackPiecePositions[8] == null) {
+				blackPiecePositions[8] = new Point(x,y);
+			}
+			else if(team == "black" && blackPiecePositions[15] == null) {
+				blackPiecePositions[15] = new Point(x,y);
+			}			
+		}
+		else if(type == "bishop") {
+			if(team == "white" && whitePiecePositions[10] == null) {
+				whitePiecePositions[10] = new Point(x,y);
+			}
+			else if(team == "white" && whitePiecePositions[13] == null) {
+				whitePiecePositions[13] = new Point(x,y);
+			}
+			else if(team == "black" && blackPiecePositions[10] == null) {
+				blackPiecePositions[10] = new Point(x,y);
+			}
+			else if(team == "black" && blackPiecePositions[13] == null) {
+				blackPiecePositions[13] = new Point(x,y);
+			}			
+		}
+		else if(type == "queen") {
+			if(team == "white" && whitePiecePositions[11] == null) {
+				whitePiecePositions[11] = new Point(x,y);
+			}
+			else if(team == "black" && blackPiecePositions[11] == null) {
+				blackPiecePositions[11] = new Point(x,y);
+			}			
+		}
+		else if(type == "king") {
+			if(team == "white" && whitePiecePositions[12] == null) {
+				whitePiecePositions[12] = new Point(x,y);
+			}
+			else if(team == "black" && blackPiecePositions[12] == null) {
+				blackPiecePositions[12] = new Point(x,y);
+			}			
+		}
+		
 	}
 	
 	// --- Getters and Setters
@@ -200,16 +263,24 @@ public class Board {
 		this.grid[x][y] = piece;
 	}
 	
-	public Point[] getWhitePiecePositions() {
+	public Point[] getALLWhitePiecePositions() {
 		return whitePiecePositions;
+	}
+	
+	public void setALLWhitePiecePositions(Point[] positions) {
+		this.whitePiecePositions = positions;
 	}
 	
 	public void setWhitePiecePosition(Point newPos, int index) {
 		this.whitePiecePositions[index] = newPos;
 	}
 	
-	public Point[] getBlackPiecePositions() {
+	public Point[] getALLBlackPiecePositions() {
 		return blackPiecePositions;
+	}
+	
+	public void setALLBlackPiecePositions(Point[] positions) {
+		this.blackPiecePositions = positions;
 	}
 	
 	public void setBlackPiecePosition(Point newPos, int index) {
@@ -222,5 +293,9 @@ public class Board {
 	
 	public List<Move> getBlackLegalMoves(){
 		return blackLegalMoves;
+	}
+	
+	public int getBoardValue() {
+		return boardValue;
 	}
 }

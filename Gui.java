@@ -65,10 +65,11 @@ public class Gui extends JFrame{
 		
 		imageBank = imgP.buildImageBank();
 		
-		//brd.setTestingGrid();
-		brd.setStartingGrid();
+		brd.setTestingGrid();
+		//brd.setStartingGrid();
 		brd.updateLegalMoves("white");
 		brd.updateLegalMoves("black");
+		brd.updateBoardValue();
 		
 		//brd.makeMove(new Move(new Point(1,1), new Point(1,2)));
 		//brd.setStartingGrid();
@@ -207,7 +208,9 @@ public class Gui extends JFrame{
     		g2d.setStroke(new BasicStroke(2));
     		
     		g2d.setFont(new Font("Tahoma", Font.PLAIN, 24));
-    		g2d.drawString("I LOVE RINA       Paint Update Count: " + paintUpdateCount, 50, 50);    	    		
+    		g2d.drawString("I LOVE RINA       Paint Update Count: " + paintUpdateCount, 50, 50); 
+    		
+    		g2d.drawString("Board Value: " + brd.getBoardValue(), 1000, 500);
     		
     		DrawGrid(g2d, squareSize, startPoint);
     		
@@ -227,8 +230,8 @@ public class Gui extends JFrame{
     		
     		if(pieceInHand != null) {
     			DrawPiece(g2d, pieceInHand, "exact", mousePosition.x - (squareSize / 2), mousePosition.y - (squareSize / 2));   			
-    		}    		    		
-    		    		
+    		}  
+    		
     		//brd.makeMove(new Move(new Point(0,0), new Point(7,7)));
         }
         

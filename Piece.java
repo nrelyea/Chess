@@ -20,7 +20,7 @@ public class Piece {
 	public int pieceValue(String type) {
 		switch(type) {
 			case "pawn":
-				return 0;
+				return 1;
 			case "rook":
 				return 5;
 			case "knight":
@@ -55,6 +55,10 @@ public class Piece {
 	
 	public void setHasMoved(boolean bool) {
 		this.hasMoved = bool;
+	}
+	
+	public int getValue() {
+		return value;
 	}
 	
 }
